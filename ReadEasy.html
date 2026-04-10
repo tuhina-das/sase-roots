@@ -1,1336 +1,1289 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ReadEasy - Make Reading Fun!</title>
 
     <!-- Google Fonts: OpenDyslexic, Lexie Readable, and system fonts -->
     <link
-      href="https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&family=Lexie+Readable:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+        href="https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&family=Lexie+Readable:wght@400;700&display=swap"
+        rel="stylesheet" />
 
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      :root {
-        --primary-color: #ff6b9d;
-        --secondary-color: #ffc75f;
-        --accent-color: #a8e6cf;
-        --success-color: #ffd93d;
-        --bg-light: #f9f6f2;
-        --text-dark: #2d3141;
-        --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
-      }
-
-      body {
-        font-family: "Arial", sans-serif;
-        background-color: var(--bg-light);
-        color: var(--text-dark);
-        line-height: 1.6;
-        padding: 0;
-        margin: 0;
-        min-height: 100vh;
-      }
-
-      /* ============ HEADER ============ */
-      header {
-        background: linear-gradient(
-          135deg,
-          var(--primary-color),
-          var(--secondary-color)
-        );
-        padding: 20px 30px;
-        box-shadow: var(--shadow);
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
-
-      .header-content {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        max-width: 1600px;
-        margin: 0 auto;
-      }
-
-      .owl-mascot {
-        font-size: 40px;
-        animation: bounce 2s infinite;
-      }
-
-      @keyframes bounce {
-        0%,
-        100% {
-          transform: translateY(0);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        50% {
-          transform: translateY(-8px);
-        }
-      }
-
-      h1 {
-        font-size: 32px;
-        color: white;
-        font-weight: 700;
-        margin: 0;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-      }
-
-      .header-subtitle {
-        color: rgba(255, 255, 255, 0.95);
-        font-size: 14px;
-        margin-left: auto;
-        font-style: italic;
-      }
-
-      /* ============ MAIN CONTAINER ============ */
-      .container {
-        max-width: 1600px;
-        margin: 20px auto;
-        padding: 0 20px;
-        display: grid;
-        grid-template-columns: 320px 1fr;
-        gap: 20px;
-        min-height: calc(100vh - 200px);
-      }
-
-      @media (max-width: 768px) {
-        .container {
-          grid-template-columns: 1fr;
-          padding: 0 15px;
-        }
-      }
-
-      /* ============ SIDEBAR (SETTINGS) ============ */
-      .sidebar {
-        background: white;
-        border-radius: 15px;
-        padding: 25px;
-        box-shadow: var(--shadow);
-        max-height: calc(100vh - 120px);
-        position: sticky;
-        top: 90px;
-        overflow-y: auto;
-      }
-
-      .sidebar h2 {
-        font-size: 24px;
-        color: var(--primary-color);
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .setting-group {
-        margin-bottom: 25px;
-      }
-
-      .setting-label {
-        font-weight: 700;
-        font-size: 14px;
-        color: var(--text-dark);
-        display: block;
-        margin-bottom: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .setting-subtitle {
-        font-size: 12px;
-        color: #888;
-        margin-top: 5px;
-      }
-
-      /* Buttons for font selection */
-      .font-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .font-btn {
-        padding: 12px;
-        border: 2px solid #e0e0e0;
-        background: white;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        text-align: left;
-      }
-
-      .font-btn:hover {
-        border-color: var(--primary-color);
-        background: rgba(255, 107, 157, 0.05);
-      }
-
-      .font-btn.active {
-        background: var(--primary-color);
-        color: white;
-        border-color: var(--primary-color);
-        box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
-      }
-
-      .font-btn.opendyslexic {
-        font-family: "OpenDyslexic", sans-serif;
-      }
-
-      .font-btn.lexie {
-        font-family: "Lexie Readable", sans-serif;
-      }
-
-      /* Toggle switches */
-      .toggle-checkbox {
-        display: none;
-      }
-
-      .toggle-label {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        gap: 10px;
-        user-select: none;
-      }
-
-      .toggle-switch {
-        width: 50px;
-        height: 28px;
-        background-color: #ccc;
-        border-radius: 14px;
-        position: relative;
-        transition: background-color 0.3s;
-      }
-
-      .toggle-switch::after {
-        content: "";
-        position: absolute;
-        width: 24px;
-        height: 24px;
-        background-color: white;
-        border-radius: 50%;
-        top: 2px;
-        left: 2px;
-        transition: left 0.3s;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      }
-
-      .toggle-checkbox:checked + .toggle-switch {
-        background-color: var(--accent-color);
-      }
-
-      .toggle-checkbox:checked + .toggle-switch::after {
-        left: 24px;
-      }
-
-      /* Sliders */
-      input[type="range"] {
-        width: 100%;
-        height: 6px;
-        border-radius: 3px;
-        background: linear-gradient(to right, #e0e0e0, var(--secondary-color));
-        outline: none;
-        -webkit-appearance: none;
-        appearance: none;
-      }
-
-      input[type="range"]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        background: var(--primary-color);
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        transition: transform 0.2s;
-      }
-
-      input[type="range"]::-webkit-slider-thumb:hover {
-        transform: scale(1.2);
-      }
-
-      input[type="range"]::-moz-range-thumb {
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        background: var(--primary-color);
-        cursor: pointer;
-        border: none;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        transition: transform 0.2s;
-      }
-
-      input[type="range"]::-moz-range-thumb:hover {
-        transform: scale(1.2);
-      }
-
-      .slider-value {
-        font-size: 12px;
-        color: var(--primary-color);
-        font-weight: 700;
-        margin-top: 5px;
-      }
-
-      /* Color theme buttons */
-      .color-buttons {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-      }
-
-      .color-btn {
-        width: 100%;
-        padding: 15px;
-        border: 3px solid transparent;
-        border-radius: 10px;
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 12px;
-        transition: all 0.3s;
-        position: relative;
-      }
-
-      .color-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      .color-btn.active {
-        border-color: var(--text-dark);
-        box-shadow: inset 0 0 0 2px var(--text-dark);
-      }
-
-      .color-white {
-        background-color: #ffffff;
-        color: var(--text-dark);
-      }
-
-      .color-yellow {
-        background-color: #fff8dc;
-        color: var(--text-dark);
-      }
-
-      .color-blue {
-        background-color: #e0f4ff;
-        color: var(--text-dark);
-      }
-
-      .color-peach {
-        background-color: #ffe6d5;
-        color: var(--text-dark);
-      }
-
-      /* File upload area */
-      .upload-area {
-        border: 3px dashed var(--primary-color);
-        border-radius: 12px;
-        padding: 25px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s;
-        background: rgba(255, 107, 157, 0.03);
-        margin-bottom: 20px;
-      }
-
-      .upload-area:hover {
-        background: rgba(255, 107, 157, 0.08);
-        border-color: var(--secondary-color);
-      }
-
-      .upload-area.dragover {
-        background: rgba(255, 107, 157, 0.15);
-        border-color: var(--primary-color);
-        transform: scale(1.02);
-      }
-
-      .upload-icon {
-        font-size: 40px;
-        margin-bottom: 10px;
-      }
-
-      .upload-text {
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--primary-color);
-        margin-bottom: 5px;
-      }
-
-      .upload-subtext {
-        font-size: 12px;
-        color: #888;
-      }
-
-      #fileInput {
-        display: none;
-      }
-
-      /* ============ BUTTONS ============ */
-      button {
-        border: none;
-        border-radius: 10px;
-        padding: 12px 20px;
-        font-size: 14px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .btn-primary {
-        background: linear-gradient(135deg, var(--primary-color), #ff5a8e);
-        color: white;
-        width: 100%;
-        box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
-      }
-
-      .btn-primary:hover {
-        box-shadow: var(--shadow-hover);
-        transform: translateY(-2px);
-      }
-
-      .btn-primary:active {
-        transform: translateY(0);
-      }
-
-      .btn-success {
-        background: linear-gradient(135deg, var(--accent-color), #7fd8be);
-        color: white;
-        box-shadow: 0 4px 12px rgba(168, 230, 207, 0.3);
-      }
-
-      .btn-success:hover {
-        box-shadow: var(--shadow-hover);
-        transform: translateY(-2px);
-      }
-
-      .btn-secondary {
-        background: var(--secondary-color);
-        color: var(--text-dark);
-        box-shadow: 0 4px 12px rgba(255, 199, 95, 0.3);
-      }
-
-      .btn-secondary:hover {
-        box-shadow: var(--shadow-hover);
-        transform: translateY(-2px);
-      }
-
-      button:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-
-      .button-group {
-        display: flex;
-        gap: 10px;
-        margin-top: 15px;
-      }
-
-      .button-group button {
-        flex: 1;
-        padding: 10px;
-      }
-
-      /* ============ MAIN CONTENT AREA ============ */
-      .content-area {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-      }
-
-      /* Success message */
-      .success-message {
-        background: linear-gradient(135deg, var(--success-color), #ffe066);
-        color: var(--text-dark);
-        padding: 20px;
-        border-radius: 12px;
-        display: none;
-        align-items: center;
-        gap: 15px;
-        font-weight: 600;
-        box-shadow: var(--shadow);
-        animation: slideIn 0.4s ease;
-      }
-
-      @keyframes slideIn {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
+        :root {
+            --primary-color: #68ce63;
+            --secondary-color: #68ce63;
+            --accent-color: #68ce63;
+            --success-color: #FFD93D;
+            --bg-light: #cadcffb3;
+            --text-dark: #022903;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
 
-      .success-message.show {
-        display: flex;
-      }
-
-      .success-emoji {
-        font-size: 28px;
-      }
-
-      /* Split view */
-      .split-view {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        display: none;
-      }
-
-      .split-view.show {
-        display: grid;
-      }
-
-      @media (max-width: 1024px) {
-        .split-view {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .view-panel {
-        background: white;
-        border-radius: 15px;
-        padding: 25px;
-        box-shadow: var(--shadow);
-      }
-
-      .view-panel h3 {
-        font-size: 16px;
-        color: var(--primary-color);
-        margin-bottom: 15px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .view-panel-content {
-        border: 1px solid #e0e0e0;
-        border-radius: 10px;
-        padding: 20px;
-        background: #f9f9f9;
-        max-height: 500px;
-        overflow-y: auto;
-        font-size: 14px;
-        line-height: 1.8;
-        color: var(--text-dark);
-      }
-
-      .reformatted-text {
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
-
-      /* ============ READING OUTPUT (RIGHT PANEL) ============ */
-      .reading-output {
-        background: white;
-        border-radius: 15px;
-        padding: 25px;
-        box-shadow: var(--shadow);
-        flex: 1;
-        display: none;
-      }
-
-      .reading-output.show {
-        display: block;
-      }
-
-      .reading-content {
-        border-radius: 10px;
-        padding: 25px;
-        white-space: pre-wrap;
-        word-break: break-word;
-        line-height: 1.8;
-        font-size: 18px;
-        transition: all 0.3s ease;
-      }
-
-      /* Reading output controls */
-      .reading-controls {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-      }
-
-      .reading-controls button {
-        flex: 1;
-        min-width: 150px;
-      }
-
-      /* Loading spinner */
-      .loading-spinner {
-        display: none;
-        text-align: center;
-        padding: 40px;
-      }
-
-      .loading-spinner.show {
-        display: block;
-      }
-
-      .spinner {
-        border: 4px solid rgba(255, 107, 157, 0.2);
-        border-top: 4px solid var(--primary-color);
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-        margin: 0 auto 20px;
-      }
-
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
         }
 
-        100% {
-          transform: rotate(360deg);
+        /* ============ HEADER ============ */
+        header {
+            background: linear-gradient(135deg,
+                    var(--primary-color),
+                    var(--secondary-color));
+            padding: 20px 30px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-      }
 
-      .loading-message {
-        font-size: 16px;
-        color: var(--primary-color);
-        font-weight: 600;
-        margin-top: 15px;
-      }
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
 
-      .loading-emoji {
-        font-size: 32px;
-        animation: bounce 2s infinite;
-        display: block;
-        margin-bottom: 10px;
-      }
+        .owl-mascot {
+            font-size: 40px;
+            animation: bounce 2s infinite;
+        }
 
-      /* Empty state */
-      .empty-state {
-        text-align: center;
-        padding: 60px 30px;
-        color: #999;
-      }
+        @keyframes bounce {
 
-      .empty-state-emoji {
-        font-size: 64px;
-        margin-bottom: 20px;
-      }
+            0%,
+            100% {
+                transform: translateY(0);
+            }
 
-      .empty-state h3 {
-        font-size: 20px;
-        color: var(--text-dark);
-        margin-bottom: 10px;
-      }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
 
-      .empty-state p {
-        font-size: 14px;
-        color: #888;
-      }
-
-      /* Error message */
-      .error-message {
-        background: #ffe5e5;
-        color: #c41e3a;
-        padding: 15px;
-        border-radius: 10px;
-        border-left: 4px solid #c41e3a;
-        margin-bottom: 20px;
-        display: none;
-        font-weight: 600;
-      }
-
-      .error-message.show {
-        display: block;
-        animation: slideIn 0.4s ease;
-      }
-
-      /* ============ RESPONSIVE ============ */
-      @media (max-width: 768px) {
         h1 {
-          font-size: 24px;
+            font-size: 32px;
+            color: white;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .header-subtitle {
-          display: none;
+            font-family: "Comic Sans MS", cursive;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 14px;
+            margin-left: auto;
+            font-style: italic;
         }
 
+        /* ============ MAIN CONTAINER ============ */
+        .container {
+            max-width: 1600px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 20px;
+            min-height: calc(100vh - 200px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 0 15px;
+            }
+        }
+
+        /* ============ SIDEBAR (SETTINGS) ============ */
         .sidebar {
-          position: relative;
-          top: auto;
-          max-height: none;
-          overflow-y: visible;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            max-height: calc(100vh - 120px);
+            position: sticky;
+            top: 90px;
+            overflow-y: auto;
         }
 
-        .viewing-label {
-          font-size: 12px;
+        .sidebar h2 {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
+        .setting-group {
+            margin-bottom: 25px;
+        }
+
+        .setting-label {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-dark);
+            display: block;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .setting-subtitle {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* Buttons for font selection */
+        .font-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .font-btn {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .font-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(255, 107, 157, 0.05);
+        }
+
+        .font-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+        }
+
+        .font-btn.opendyslexic {
+            font-family: "OpenDyslexic", sans-serif;
+        }
+
+        .font-btn.lexie {
+            font-family: "Lexie Readable", sans-serif;
+        }
+
+        /* Toggle switches */
+        .toggle-checkbox {
+            display: none;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            gap: 10px;
+            user-select: none;
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 28px;
+            background-color: #ccc;
+            border-radius: 14px;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-switch::after {
+            content: "";
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-checkbox:checked+.toggle-switch {
+            background-color: var(--accent-color);
+        }
+
+        .toggle-checkbox:checked+.toggle-switch::after {
+            left: 24px;
+        }
+
+        /* Sliders */
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(to right, #e0e0e0, var(--secondary-color));
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .slider-value {
+            font-size: 12px;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        /* Color theme buttons */
+        .color-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .color-btn {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .color-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .color-btn.active {
+            border-color: var(--text-dark);
+            box-shadow: inset 0 0 0 2px var(--text-dark);
+        }
+
+        .color-white {
+            background-color: #ffffff;
+            color: var(--text-dark);
+        }
+
+        .color-yellow {
+            background-color: #fff8dc;
+            color: var(--text-dark);
+        }
+
+        .color-blue {
+            background-color: #e0f4ff;
+            color: var(--text-dark);
+        }
+
+        .color-peach {
+            background-color: #ffe6d5;
+            color: var(--text-dark);
+        }
+
+        /* File upload area */
+        .upload-area {
+            border: 3px dashed var(--primary-color);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255, 107, 157, 0.03);
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            background: rgba(255, 107, 157, 0.08);
+            border-color: var(--secondary-color);
+        }
+
+        .upload-area.dragover {
+            background: rgba(255, 107, 157, 0.15);
+            border-color: var(--primary-color);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .upload-subtext {
+            font-size: 12px;
+            color: #888;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* ============ BUTTONS ============ */
         button {
-          padding: 10px 15px;
-          font-size: 12px;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .reading-content {
-          font-size: 16px;
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), #68ce63);
+            color: white;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--accent-color), #68ce63);
+            color: white;
+            box-shadow: 0 4px 12px rgba(168, 230, 207, 0.3);
+        }
+
+        .btn-success:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: var(--text-dark);
+            box-shadow: 0 4px 12px rgba(255, 199, 95, 0.3);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .button-group button {
+            flex: 1;
+            padding: 10px;
+        }
+
+        /* ============ MAIN CONTENT AREA ============ */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Success message */
+        .success-message {
+            background: linear-gradient(135deg, var(--success-color), #ffe066);
+            color: var(--text-dark);
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-message.show {
+            display: flex;
+        }
+
+        .success-emoji {
+            font-size: 28px;
+        }
+
+        /* Split view */
+        .split-view {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            display: none;
+        }
+
+        .split-view.show {
+            display: grid;
+        }
+
+        @media (max-width: 1024px) {
+            .split-view {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .view-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .view-panel h3 {
+            font-size: 16px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .view-panel-content {
-          max-height: 300px;
-          font-size: 13px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            background: #f9f9f9;
+            max-height: 500px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-dark);
         }
-      }
 
-      /* Bionic reading - bold first half of each word */
-      .bionic-word {
-        font-weight: 700;
-      }
+        .reformatted-text {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
 
-      .bionic-word.second-half {
-        font-weight: 400;
-      }
+        /* ============ READING OUTPUT (RIGHT PANEL) ============ */
+        .reading-output {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            flex: 1;
+            display: none;
+        }
+
+        .reading-output.show {
+            display: block;
+        }
+
+        .reading-content {
+            border-radius: 10px;
+            padding: 25px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.8;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        /* Reading output controls */
+        .reading-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .reading-controls button {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-spinner.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 107, 157, 0.2);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-message {
+            font-size: 16px;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .loading-emoji {
+            font-size: 32px;
+            animation: bounce 2s infinite;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 30px;
+            color: #999;
+        }
+
+        .empty-state-emoji {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: #888;
+        }
+
+        /* Error message */
+        .error-message {
+            background: #ffe5e5;
+            color: #c41e3a;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #c41e3a;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            .header-subtitle {
+                display: none;
+            }
+
+            .sidebar {
+                position: relative;
+                top: auto;
+                max-height: none;
+                overflow-y: visible;
+            }
+
+            .viewing-label {
+                font-size: 12px;
+            }
+
+            button {
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+
+            .reading-content {
+                font-size: 16px;
+            }
+
+            .view-panel-content {
+                max-height: 300px;
+                font-size: 13px;
+            }
+        }
+
+        /* Bionic reading - bold first half of each word */
+        .bionic-word {
+            font-weight: 700;
+        }
+
+        .bionic-word.second-half {
+            font-weight: 400;
+        }
     </style>
-  </head>
+</head>
 
-  <body>
+<body>
     <!-- HEADER -->
     <header>
-      <div class="header-content">
-        <div class="owl-mascot">🦉</div>
-        <h1>ReadEasy</h1>
-        <div class="header-subtitle">Making reading easier and more fun!</div>
-      </div>
+        <div class="header-content">
+            <div class="owl-mascot">🦉</div>
+            <h1>ReadEasy</h1>
+            <div class="header-subtitle">Making reading easier and more fun!</div>
+        </div>
     </header>
 
     <!-- MAIN CONTAINER -->
     <div class="container">
-      <!-- SIDEBAR: SETTINGS -->
-      <aside class="sidebar">
-        <h2>Settings ⚙️</h2>
+        <!-- SIDEBAR: SETTINGS -->
+        <aside class="sidebar">
+            <h2>Settings ⚙️</h2>
 
-        <!-- Upload Section -->
-        <div class="setting-group">
-          <div class="upload-area" id="uploadArea">
-            <div class="upload-icon">📄</div>
-            <div class="upload-text">Drop your file here</div>
-            <div class="upload-subtext">or click to upload PDF/JPG/PNG</div>
-          </div>
-          <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" />
-          <button class="btn-primary" id="processBtn" disabled>
-            Process File
-          </button>
-          <div
-            id="fileName"
-            style="
+            <!-- Upload Section -->
+            <div class="setting-group">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📄</div>
+                    <div class="upload-text">Drop your file here</div>
+                    <div class="upload-subtext">or click to upload PDF/JPG/PNG</div>
+                </div>
+                <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" />
+                <button class="btn-primary" id="processBtn" disabled>
+                    Process File
+                </button>
+                <div id="fileName" style="
               font-size: 12px;
               color: #888;
               margin-top: 10px;
               text-align: center;
-            "
-          ></div>
-        </div>
+            "></div>
+            </div>
 
-        <hr
-          style="margin: 20px 0; border: none; border-top: 1px solid #e0e0e0"
-        />
+            <hr style="margin: 20px 0; border: none; border-top: 1px solid #e0e0e0" />
 
-        <!-- Font Selection -->
-        <div class="setting-group">
-          <label class="setting-label">Font Style</label>
-          <div class="font-buttons">
-            <button
-              class="font-btn active opendyslexic"
-              data-font="OpenDyslexic"
-            >
-              OpenDyslexic
-            </button>
-            <button class="font-btn lexie" data-font="Lexie Readable">
-              Lexie Readable
-            </button>
-            <button class="font-btn" data-font="Arial">Arial (Regular)</button>
-          </div>
-        </div>
+            <!-- Font Selection -->
+            <div class="setting-group">
+                <label class="setting-label">Font Style</label>
+                <div class="font-buttons">
+                    <button class="font-btn active opendyslexic" data-font="OpenDyslexic">
+                        OpenDyslexic
+                    </button>
+                    <button class="font-btn lexie" data-font="Lexie Readable">
+                        Lexie Readable
+                    </button>
+                    <button class="font-btn" data-font="Arial">Arial (Regular)</button>
+                </div>
+            </div>
 
-        <!-- Bionic Reading -->
-        <div class="setting-group">
-          <label class="toggle-label">
-            <input type="checkbox" class="toggle-checkbox" id="bionicToggle" />
-            <span class="toggle-switch"></span>
-            <span>Bionic Reading</span>
-          </label>
-          <p class="setting-subtitle">Bold the start of each word</p>
-        </div>
+            <!-- Bionic Reading -->
+            <div class="setting-group">
+                <label class="toggle-label">
+                    <input type="checkbox" class="toggle-checkbox" id="bionicToggle" />
+                    <span class="toggle-switch"></span>
+                    <span>Bionic Reading</span>
+                </label>
+                <p class="setting-subtitle">Bold the start of each word</p>
+            </div>
 
-        <!-- Letter Spacing -->
-        <div class="setting-group">
-          <label class="setting-label">Letter Spacing</label>
-          <input
-            type="range"
-            id="letterSpacing"
-            min="0"
-            max="8"
-            value="0"
-            step="0.5"
-          />
-          <div class="slider-value">
-            <span id="letterSpacingValue">Normal</span>
-          </div>
-        </div>
+            <!-- Letter Spacing -->
+            <div class="setting-group">
+                <label class="setting-label">Letter Spacing</label>
+                <input type="range" id="letterSpacing" min="0" max="8" value="0" step="0.5" />
+                <div class="slider-value">
+                    <span id="letterSpacingValue">Normal</span>
+                </div>
+            </div>
 
-        <!-- Line Height -->
-        <div class="setting-group">
-          <label class="setting-label">Line Height</label>
-          <input
-            type="range"
-            id="lineHeight"
-            min="1"
-            max="2.5"
-            value="1.8"
-            step="0.1"
-          />
-          <div class="slider-value"><span id="lineHeightValue">1.8</span></div>
-        </div>
+            <!-- Line Height -->
+            <div class="setting-group">
+                <label class="setting-label">Line Height</label>
+                <input type="range" id="lineHeight" min="1" max="2.5" value="1.8" step="0.1" />
+                <div class="slider-value"><span id="lineHeightValue">1.8</span></div>
+            </div>
 
-        <!-- Font Size -->
-        <div class="setting-group">
-          <label class="setting-label">Font Size</label>
-          <input
-            type="range"
-            id="fontSize"
-            min="12"
-            max="32"
-            value="18"
-            step="1"
-          />
-          <div class="slider-value"><span id="fontSizeValue">18px</span></div>
-        </div>
+            <!-- Font Size -->
+            <div class="setting-group">
+                <label class="setting-label">Font Size</label>
+                <input type="range" id="fontSize" min="12" max="32" value="18" step="1" />
+                <div class="slider-value"><span id="fontSizeValue">18px</span></div>
+            </div>
 
-        <!-- Background Color Theme -->
-        <div class="setting-group">
-          <label class="setting-label">Background Color</label>
-          <div class="color-buttons">
-            <button
-              class="color-btn color-white active"
-              data-color="white"
-              title="White"
-            >
-              ⚪ White
-            </button>
-            <button
-              class="color-btn color-yellow"
-              data-color="yellow"
-              title="Soft Yellow"
-            >
-              🟡 Yellow
-            </button>
-            <button
-              class="color-btn color-blue"
-              data-color="blue"
-              title="Light Blue"
-            >
-              🔵 Blue
-            </button>
-            <button
-              class="color-btn color-peach"
-              data-color="peach"
-              title="Light Peach"
-            >
-              🟠 Peach
-            </button>
-          </div>
-        </div>
+            <!-- Background Color Theme -->
+            <div class="setting-group">
+                <label class="setting-label">Background Color</label>
+                <div class="color-buttons">
+                    <button class="color-btn color-white active" data-color="white" title="White">
+                        ⚪ White
+                    </button>
+                    <button class="color-btn color-yellow" data-color="yellow" title="Soft Yellow">
+                        🟡 Yellow
+                    </button>
+                    <button class="color-btn color-blue" data-color="blue" title="Light Blue">
+                        🔵 Blue
+                    </button>
+                    <button class="color-btn color-peach" data-color="peach" title="Light Peach">
+                        🟠 Peach
+                    </button>
+                </div>
+            </div>
 
-        <hr
-          style="margin: 20px 0; border: none; border-top: 1px solid #e0e0e0"
-        />
+            <hr style="margin: 20px 0; border: none; border-top: 1px solid #e0e0e0" />
 
-        <!-- Instructions -->
-        <div
-          style="
+            <!-- Instructions -->
+            <div style="
             background: rgba(255, 107, 157, 0.08);
             padding: 15px;
             border-radius: 8px;
             font-size: 12px;
             line-height: 1.6;
-          "
-        >
-          <strong>💡 How to use:</strong><br />
-          1. Upload a PDF or image<br />
-          2. Click "Process File"<br />
-          3. Adjust settings to your liking<br />
-          4. Use the Read Aloud button
-        </div>
-      </aside>
+          ">
+                <strong>💡 How to use:</strong><br />
+                1. Upload a PDF or image<br />
+                2. Click "Process File"<br />
+                3. Adjust settings to your liking<br />
+                4. Use the Read Aloud button
+            </div>
+        </aside>
 
-      <!-- MAIN CONTENT AREA -->
-      <div class="content-area">
-        <!-- Error Message -->
-        <div class="error-message" id="errorMessage"></div>
+        <!-- MAIN CONTENT AREA -->
+        <div class="content-area">
+            <!-- Error Message -->
+            <div class="error-message" id="errorMessage"></div>
 
-        <!-- Success Message -->
-        <div class="success-message" id="successMessage">
-          <span class="success-emoji">🎉</span>
-          <span>Great! Your page is ready to read!</span>
-        </div>
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage">
+                <span class="success-emoji">🎉</span>
+                <span>Great! Your page is ready to read!</span>
+            </div>
 
-        <!-- Loading Spinner -->
-        <div class="loading-spinner" id="loadingSpinner">
-          <span class="loading-emoji">✨</span>
-          <div class="spinner"></div>
-          <div class="loading-message">Reading your page with AI... ✨</div>
-        </div>
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <span class="loading-emoji">✨</span>
+                <div class="spinner"></div>
+                <div class="loading-message">Reading your page with AI... ✨</div>
+            </div>
 
-        <!-- Split View (Before/After) -->
-        <div class="split-view" id="splitView">
-          <div class="view-panel">
-            <h3>📋 Original Text</h3>
-            <div class="view-panel-content" id="originalText"></div>
-          </div>
-          <div class="view-panel">
-            <h3>✨ Your Settings</h3>
-            <div class="view-panel-content" id="settingsPreview"></div>
-          </div>
-        </div>
+            <!-- Split View (Before/After) -->
+            <div class="split-view" id="splitView">
+                <div class="view-panel">
+                    <h3>📋 Original Text</h3>
+                    <div class="view-panel-content" id="originalText"></div>
+                </div>
+                <div class="view-panel">
+                    <h3>✨ Your Settings</h3>
+                    <div class="view-panel-content" id="settingsPreview"></div>
+                </div>
+            </div>
 
-        <!-- Reading Output Panel -->
-        <div class="reading-output" id="readingOutput">
-          <h2 style="color: var(--primary-color); margin-bottom: 20px">
-            📖 Your Reading Space
-          </h2>
-          <div class="reading-controls">
-            <button class="btn-success" id="readAloudBtn">🔊 Read Aloud</button>
-            <button class="btn-secondary" id="pauseBtn" style="display: none">
-              ⏸ Pause
-            </button>
-            <button class="btn-secondary" id="downloadBtn">⬇️ Download</button>
-          </div>
-          <div class="reading-content" id="readingContent"></div>
-        </div>
+            <!-- Reading Output Panel -->
+            <div class="reading-output" id="readingOutput">
+                <h2 style="color: var(--primary-color); margin-bottom: 20px">
+                    📖 Your Reading Space
+                </h2>
+                <div class="reading-controls">
+                    <button class="btn-success" id="readAloudBtn">🔊 Read Aloud</button>
+                    <button class="btn-secondary" id="pauseBtn" style="display: none">
+                        ⏸ Pause
+                    </button>
+                    <button class="btn-secondary" id="downloadBtn">⬇️ Download</button>
+                </div>
+                <div class="reading-content" id="readingContent"></div>
+            </div>
 
-        <!-- Empty State -->
-        <div class="empty-state" id="emptyState">
-          <div class="empty-state-emoji">📚</div>
-          <h3>No document loaded yet</h3>
-          <p>Upload a scanned page to get started!</p>
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-state-emoji">📚</div>
+                <h3>No document loaded yet</h3>
+                <p>Upload a scanned page to get started!</p>
+            </div>
         </div>
-      </div>
     </div>
 
     <!-- PDF.js for PDF rendering -->
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 
     <script>
-      // Point PDF.js worker at the CDN copy
-      if (typeof pdfjsLib !== "undefined") {
-        pdfjsLib.GlobalWorkerOptions.workerSrc =
-          "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
-      }
-
-      // ============ STATE ============
-      let state = {
-        rawText: "",
-        currentFont: "OpenDyslexic",
-        bionicMode: false,
-        letterSpacing: 0,
-        lineHeight: 1.8,
-        fontSize: 18,
-        backgroundColor: "white",
-        currentlySpeaking: false,
-        utterance: null,
-      };
-
-      const colorMap = {
-        white: "#ffffff",
-        yellow: "#fff8dc",
-        blue: "#e0f4ff",
-        peach: "#ffe6d5",
-      };
-
-      const fontMap = {
-        OpenDyslexic: '"OpenDyslexic", sans-serif',
-        "Lexie Readable": '"Lexie Readable", sans-serif',
-        Arial: "Arial, sans-serif",
-      };
-
-      // ============ DOM ELEMENTS ============
-      const uploadArea = document.getElementById("uploadArea");
-      const fileInput = document.getElementById("fileInput");
-      const processBtn = document.getElementById("processBtn");
-      const fileNameEl = document.getElementById("fileName");
-      const loadingSpinner = document.getElementById("loadingSpinner");
-      const successMessage = document.getElementById("successMessage");
-      const errorMessage = document.getElementById("errorMessage");
-      const emptyState = document.getElementById("emptyState");
-      const splitView = document.getElementById("splitView");
-      const originalTextDiv = document.getElementById("originalText");
-      const settingsPreviewDiv = document.getElementById("settingsPreview");
-      const readingOutput = document.getElementById("readingOutput");
-      const readingContent = document.getElementById("readingContent");
-      const readAloudBtn = document.getElementById("readAloudBtn");
-      const pauseBtn = document.getElementById("pauseBtn");
-      const downloadBtn = document.getElementById("downloadBtn");
-
-      // ============ UI HELPERS ============
-      function showLoading() {
-        loadingSpinner.classList.add("show");
-        emptyState.style.display = "none";
-        splitView.classList.remove("show");
-        readingOutput.classList.remove("show");
-        successMessage.classList.remove("show");
-      }
-
-      function hideLoading() {
-        loadingSpinner.classList.remove("show");
-      }
-
-      function showSuccess() {
-        successMessage.classList.add("show");
-        setTimeout(() => successMessage.classList.remove("show"), 4000);
-        emptyState.style.display = "none";
-        splitView.classList.add("show");
-        readingOutput.classList.add("show");
-      }
-
-      function showError(message) {
-        errorMessage.textContent = "⚠️ " + message;
-        errorMessage.classList.add("show");
-        hideLoading();
-        processBtn.disabled = false;
-      }
-
-      function clearError() {
-        errorMessage.classList.remove("show");
-      }
-
-      function escapeHtml(text) {
-        const div = document.createElement("div");
-        div.textContent = text;
-        return div.innerHTML;
-      }
-
-      // ============ FILE UPLOAD HANDLING ============
-      uploadArea.addEventListener("click", () => fileInput.click());
-
-      uploadArea.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        uploadArea.classList.add("dragover");
-      });
-
-      uploadArea.addEventListener("dragleave", () => {
-        uploadArea.classList.remove("dragover");
-      });
-
-      uploadArea.addEventListener("drop", (e) => {
-        e.preventDefault();
-        uploadArea.classList.remove("dragover");
-        handleFileSelect(e.dataTransfer.files[0]);
-      });
-
-      fileInput.addEventListener("change", (e) => {
-        if (e.target.files.length > 0) handleFileSelect(e.target.files[0]);
-      });
-
-      function handleFileSelect(file) {
-        if (!file) return;
-        const allowed = [
-          "application/pdf",
-          "image/jpeg",
-          "image/png",
-          "image/jpg",
-        ];
-        if (!allowed.includes(file.type)) {
-          showError("Please upload a PDF or image file (JPG/PNG)");
-          return;
-        }
-        fileNameEl.textContent = `📌 ${file.name}`;
-        processBtn.disabled = false;
-        clearError();
-      }
-
-      // ============ FILE / CANVAS HELPERS ============
-      function readFileAsArrayBuffer(file) {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = (e) => resolve(e.target.result);
-          reader.onerror = reject;
-          reader.readAsArrayBuffer(file);
-        });
-      }
-
-      // Render one PDF page → blob: URL
-      async function renderPdfPageToBlobURL(pdfDoc, pageNum) {
-        const page = await pdfDoc.getPage(pageNum);
-        const viewport = page.getViewport({ scale: 2 });
-        const canvas = document.createElement("canvas");
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        await page.render({ canvasContext: canvas.getContext("2d"), viewport })
-          .promise;
-        return new Promise((resolve, reject) => {
-          canvas.toBlob((blob) => {
-            if (!blob) {
-              reject(new Error("Canvas toBlob failed"));
-              return;
-            }
-            resolve(URL.createObjectURL(blob));
-          }, "image/png");
-        });
-      }
-
-      // ============ OCR.SPACE API ============
-      async function extractTextFromBlob(blobURL) {
-        const blob = await fetch(blobURL).then((r) => r.blob());
-        const formData = new FormData();
-        formData.append("file", blob, "page.png");
-        formData.append("apikey", "helloworld"); // free test key
-        formData.append("language", "eng");
-        formData.append("isOverlayRequired", "false");
-
-        const res = await fetch("https://api.ocr.space/parse/image", {
-          method: "POST",
-          body: formData,
-        });
-        const json = await res.json();
-        return json.ParsedResults?.[0]?.ParsedText || "";
-      }
-
-      // ============ OCR PROCESSING ============
-      processBtn.addEventListener("click", async () => {
-        const file = fileInput.files[0];
-        if (!file) {
-          showError("Please select a file first");
-          return;
+        // Point PDF.js worker at the CDN copy
+        if (typeof pdfjsLib !== "undefined") {
+            pdfjsLib.GlobalWorkerOptions.workerSrc =
+                "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
         }
 
-        showLoading();
-        processBtn.disabled = true;
-        clearError();
-
-        const blobURLs = [];
-
-        try {
-          let fullText = "";
-
-          if (file.type === "application/pdf") {
-            const arrayBuffer = await readFileAsArrayBuffer(file);
-            const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer })
-              .promise;
-            const numPages = pdfDoc.numPages;
-
-            for (let p = 1; p <= numPages; p++) {
-              const msg = document.querySelector(".loading-message");
-              if (msg)
-                msg.textContent = `Reading page ${p} of ${numPages}... hang tight! 📖`;
-              const blobURL = await renderPdfPageToBlobURL(pdfDoc, p);
-              blobURLs.push(blobURL);
-              fullText += (await extractTextFromBlob(blobURL)) + "\n\n";
-            }
-          } else {
-            const blobURL = URL.createObjectURL(file);
-            blobURLs.push(blobURL);
-            fullText = await extractTextFromBlob(blobURL);
-          }
-
-          state.rawText = fullText.trim();
-
-          if (!state.rawText) {
-            showError("No text found. Try a clearer photo or scan.");
-            return;
-          }
-
-          updateDisplay();
-          hideLoading();
-          showSuccess();
-        } catch (err) {
-          showError("Error processing file: " + (err.message || String(err)));
-        } finally {
-          processBtn.disabled = false;
-          blobURLs.forEach((u) => URL.revokeObjectURL(u));
-        }
-      });
-
-      // ============ DISPLAY UPDATES ============
-      function updateDisplay() {
-        if (!state.rawText) return;
-
-        const bgColor = colorMap[state.backgroundColor];
-        const textColor = "#2D3141";
-
-        // Original text (plain)
-        originalTextDiv.textContent = state.rawText;
-
-        // Formatted preview + main output
-        const formatted = formatTextWithSettings(state.rawText);
-        settingsPreviewDiv.innerHTML = formatted;
-        readingContent.innerHTML = formatted;
-
-        // Style main reading area
-        readingContent.style.backgroundColor = bgColor;
-        readingContent.style.color = textColor;
-        readingContent.style.fontFamily = fontMap[state.currentFont];
-        readingContent.style.fontSize = state.fontSize + "px";
-        readingContent.style.lineHeight = state.lineHeight;
-        readingContent.style.letterSpacing = state.letterSpacing + "px";
-
-        // Style preview area
-        settingsPreviewDiv.style.backgroundColor = bgColor;
-        settingsPreviewDiv.style.color = textColor;
-        settingsPreviewDiv.style.fontFamily = fontMap[state.currentFont];
-        settingsPreviewDiv.style.fontSize = "13px";
-        settingsPreviewDiv.style.lineHeight = state.lineHeight;
-        settingsPreviewDiv.style.letterSpacing = state.letterSpacing + "px";
-      }
-
-      function formatTextWithSettings(text) {
-        // Preserve line breaks
-        const lines = text.split("\n");
-        const processedLines = lines.map((line) => {
-          if (!state.bionicMode) return escapeHtml(line);
-          // Bionic: bold first half of each word
-          return line
-            .split(" ")
-            .map((word) => {
-              if (!word) return "";
-              const mid = Math.ceil(word.length / 2);
-              const bold = escapeHtml(word.substring(0, mid));
-              const rest = escapeHtml(word.substring(mid));
-              return `<strong>${bold}</strong>${rest}`;
-            })
-            .join(" ");
-        });
-        return processedLines.join("<br>");
-      }
-
-      // ============ SETTINGS HANDLERS ============
-      // Font buttons
-      document.querySelectorAll(".font-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          document
-            .querySelectorAll(".font-btn")
-            .forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-          state.currentFont = btn.dataset.font;
-          updateDisplay();
-        });
-      });
-
-      // Bionic reading toggle
-      document
-        .getElementById("bionicToggle")
-        .addEventListener("change", (e) => {
-          state.bionicMode = e.target.checked;
-          updateDisplay();
-        });
-
-      // Letter spacing slider
-      document
-        .getElementById("letterSpacing")
-        .addEventListener("input", (e) => {
-          state.letterSpacing = parseFloat(e.target.value);
-          const val = state.letterSpacing;
-          let label = "Normal";
-          if (val >= 3) label = "Extra Wide";
-          else if (val >= 1.5) label = "Wide";
-          document.getElementById("letterSpacingValue").textContent = label;
-          updateDisplay();
-        });
-
-      // Line height slider
-      document.getElementById("lineHeight").addEventListener("input", (e) => {
-        state.lineHeight = parseFloat(e.target.value);
-        document.getElementById("lineHeightValue").textContent =
-          state.lineHeight.toFixed(1);
-        updateDisplay();
-      });
-
-      // Font size slider
-      document.getElementById("fontSize").addEventListener("input", (e) => {
-        state.fontSize = parseInt(e.target.value);
-        document.getElementById("fontSizeValue").textContent =
-          state.fontSize + "px";
-        updateDisplay();
-      });
-
-      // Background color buttons
-      document.querySelectorAll(".color-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          document
-            .querySelectorAll(".color-btn")
-            .forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-          state.backgroundColor = btn.dataset.color;
-          updateDisplay();
-        });
-      });
-
-      // ============ READ ALOUD ============
-      readAloudBtn.addEventListener("click", () => {
-        if (state.currentlySpeaking) {
-          speechSynthesis.cancel();
-          state.currentlySpeaking = false;
-          readAloudBtn.innerHTML = "🔊 Read Aloud";
-          pauseBtn.style.display = "none";
-          return;
-        }
-
-        if (!state.rawText) {
-          showError("No text to read. Please upload a document first.");
-          return;
-        }
-
-        state.utterance = new SpeechSynthesisUtterance(state.rawText);
-        state.utterance.rate = 0.9;
-        state.utterance.pitch = 1;
-        state.utterance.volume = 1;
-
-        state.utterance.onend = () => {
-          state.currentlySpeaking = false;
-          readAloudBtn.innerHTML = "🔊 Read Aloud";
-          pauseBtn.style.display = "none";
+        // ============ STATE ============
+        let state = {
+            rawText: "",
+            currentFont: "OpenDyslexic",
+            bionicMode: false,
+            letterSpacing: 0,
+            lineHeight: 1.8,
+            fontSize: 18,
+            backgroundColor: "white",
+            currentlySpeaking: false,
+            utterance: null,
         };
 
-        state.currentlySpeaking = true;
-        readAloudBtn.innerHTML = "⏹ Stop";
-        pauseBtn.style.display = "inline-block";
-        speechSynthesis.speak(state.utterance);
-      });
+        const colorMap = {
+            white: "#ffffff",
+            yellow: "#fff8dc",
+            blue: "#e0f4ff",
+            peach: "#ffe6d5",
+        };
 
-      pauseBtn.addEventListener("click", () => {
-        if (speechSynthesis.paused) {
-          speechSynthesis.resume();
-          pauseBtn.innerHTML = "⏸ Pause";
-        } else {
-          speechSynthesis.pause();
-          pauseBtn.innerHTML = "▶ Resume";
-        }
-      });
+        const fontMap = {
+            OpenDyslexic: '"OpenDyslexic", sans-serif',
+            "Lexie Readable": '"Lexie Readable", sans-serif',
+            Arial: "Arial, sans-serif",
+        };
 
-      // ============ DOWNLOAD ============
-      downloadBtn.addEventListener("click", () => {
-        if (!state.rawText) {
-          showError("No text to download. Please upload a document first.");
-          return;
+        // ============ DOM ELEMENTS ============
+        const uploadArea = document.getElementById("uploadArea");
+        const fileInput = document.getElementById("fileInput");
+        const processBtn = document.getElementById("processBtn");
+        const fileNameEl = document.getElementById("fileName");
+        const loadingSpinner = document.getElementById("loadingSpinner");
+        const successMessage = document.getElementById("successMessage");
+        const errorMessage = document.getElementById("errorMessage");
+        const emptyState = document.getElementById("emptyState");
+        const splitView = document.getElementById("splitView");
+        const originalTextDiv = document.getElementById("originalText");
+        const settingsPreviewDiv = document.getElementById("settingsPreview");
+        const readingOutput = document.getElementById("readingOutput");
+        const readingContent = document.getElementById("readingContent");
+        const readAloudBtn = document.getElementById("readAloudBtn");
+        const pauseBtn = document.getElementById("pauseBtn");
+        const downloadBtn = document.getElementById("downloadBtn");
+
+        // ============ UI HELPERS ============
+        function showLoading() {
+            loadingSpinner.classList.add("show");
+            emptyState.style.display = "none";
+            splitView.classList.remove("show");
+            readingOutput.classList.remove("show");
+            successMessage.classList.remove("show");
         }
-        const a = document.createElement("a");
-        a.href =
-          "data:text/plain;charset=utf-8," + encodeURIComponent(state.rawText);
-        a.download = "readeasy-text.txt";
-        a.style.display = "none";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      });
+
+        function hideLoading() {
+            loadingSpinner.classList.remove("show");
+        }
+
+        function showSuccess() {
+            successMessage.classList.add("show");
+            setTimeout(() => successMessage.classList.remove("show"), 4000);
+            emptyState.style.display = "none";
+            splitView.classList.add("show");
+            readingOutput.classList.add("show");
+        }
+
+        function showError(message) {
+            errorMessage.textContent = "⚠️ " + message;
+            errorMessage.classList.add("show");
+            hideLoading();
+            processBtn.disabled = false;
+        }
+
+        function clearError() {
+            errorMessage.classList.remove("show");
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement("div");
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ============ FILE UPLOAD HANDLING ============
+        uploadArea.addEventListener("click", () => fileInput.click());
+
+        uploadArea.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            uploadArea.classList.add("dragover");
+        });
+
+        uploadArea.addEventListener("dragleave", () => {
+            uploadArea.classList.remove("dragover");
+        });
+
+        uploadArea.addEventListener("drop", (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove("dragover");
+            handleFileSelect(e.dataTransfer.files[0]);
+        });
+
+        fileInput.addEventListener("change", (e) => {
+            if (e.target.files.length > 0) handleFileSelect(e.target.files[0]);
+        });
+
+        function handleFileSelect(file) {
+            if (!file) return;
+            const allowed = [
+                "application/pdf",
+                "image/jpeg",
+                "image/png",
+                "image/jpg",
+            ];
+            if (!allowed.includes(file.type)) {
+                showError("Please upload a PDF or image file (JPG/PNG)");
+                return;
+            }
+            fileNameEl.textContent = `📌 ${file.name}`;
+            processBtn.disabled = false;
+            clearError();
+        }
+
+        // ============ FILE / CANVAS HELPERS ============
+        function readFileAsArrayBuffer(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        // Render one PDF page → blob: URL
+        async function renderPdfPageToBlobURL(pdfDoc, pageNum) {
+            const page = await pdfDoc.getPage(pageNum);
+            const viewport = page.getViewport({ scale: 2 });
+            const canvas = document.createElement("canvas");
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            await page.render({ canvasContext: canvas.getContext("2d"), viewport })
+                .promise;
+            return new Promise((resolve, reject) => {
+                canvas.toBlob((blob) => {
+                    if (!blob) {
+                        reject(new Error("Canvas toBlob failed"));
+                        return;
+                    }
+                    resolve(URL.createObjectURL(blob));
+                }, "image/png");
+            });
+        }
+
+        // ============ OCR.SPACE API ============
+        async function extractTextFromBlob(blobURL) {
+            const blob = await fetch(blobURL).then((r) => r.blob());
+            const formData = new FormData();
+            formData.append("file", blob, "page.png");
+            formData.append("apikey", "K85005853988957"); // free test key
+            formData.append("language", "eng");
+            formData.append("isOverlayRequired", "false");
+
+            const res = await fetch("https://api.ocr.space/parse/image", {
+                method: "POST",
+                body: formData,
+            });
+            const json = await res.json();
+            return json.ParsedResults?.[0]?.ParsedText || "";
+        }
+
+        // ============ OCR PROCESSING ============
+        processBtn.addEventListener("click", async () => {
+            const file = fileInput.files[0];
+            if (!file) {
+                showError("Please select a file first");
+                return;
+            }
+
+            showLoading();
+            processBtn.disabled = true;
+            clearError();
+
+            const blobURLs = [];
+
+            try {
+                let fullText = "";
+
+                if (file.type === "application/pdf") {
+                    const arrayBuffer = await readFileAsArrayBuffer(file);
+                    const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer })
+                        .promise;
+                    const numPages = pdfDoc.numPages;
+
+                    for (let p = 1; p <= numPages; p++) {
+                        const msg = document.querySelector(".loading-message");
+                        if (msg)
+                            msg.textContent = `Reading page ${p} of ${numPages}... hang tight! 📖`;
+                        const blobURL = await renderPdfPageToBlobURL(pdfDoc, p);
+                        blobURLs.push(blobURL);
+                        fullText += (await extractTextFromBlob(blobURL)) + "\n\n";
+                    }
+                } else {
+                    const blobURL = URL.createObjectURL(file);
+                    blobURLs.push(blobURL);
+                    fullText = await extractTextFromBlob(blobURL);
+                }
+
+                state.rawText = fullText.trim();
+
+                if (!state.rawText) {
+                    showError("No text found. Try a clearer photo or scan.");
+                    return;
+                }
+
+                updateDisplay();
+                hideLoading();
+                showSuccess();
+            } catch (err) {
+                showError("Error processing file: " + (err.message || String(err)));
+            } finally {
+                processBtn.disabled = false;
+                blobURLs.forEach((u) => URL.revokeObjectURL(u));
+            }
+        });
+
+        // ============ DISPLAY UPDATES ============
+        function updateDisplay() {
+            if (!state.rawText) return;
+
+            const bgColor = colorMap[state.backgroundColor];
+            const textColor = "#2D3141";
+
+            // Original text (plain)
+            originalTextDiv.textContent = state.rawText;
+
+            // Formatted preview + main output
+            const formatted = formatTextWithSettings(state.rawText);
+            settingsPreviewDiv.innerHTML = formatted;
+            readingContent.innerHTML = formatted;
+
+            // Style main reading area
+            readingContent.style.backgroundColor = bgColor;
+            readingContent.style.color = textColor;
+            readingContent.style.fontFamily = fontMap[state.currentFont];
+            readingContent.style.fontSize = state.fontSize + "px";
+            readingContent.style.lineHeight = state.lineHeight;
+            readingContent.style.letterSpacing = state.letterSpacing + "px";
+
+            // Style preview area
+            settingsPreviewDiv.style.backgroundColor = bgColor;
+            settingsPreviewDiv.style.color = textColor;
+            settingsPreviewDiv.style.fontFamily = fontMap[state.currentFont];
+            settingsPreviewDiv.style.fontSize = "13px";
+            settingsPreviewDiv.style.lineHeight = state.lineHeight;
+            settingsPreviewDiv.style.letterSpacing = state.letterSpacing + "px";
+        }
+
+        function formatTextWithSettings(text) {
+            // Preserve line breaks
+            const lines = text.split("\n");
+            const processedLines = lines.map((line) => {
+                if (!state.bionicMode) return escapeHtml(line);
+                // Bionic: bold first half of each word
+                return line
+                    .split(" ")
+                    .map((word) => {
+                        if (!word) return "";
+                        const mid = Math.ceil(word.length / 2);
+                        const bold = escapeHtml(word.substring(0, mid));
+                        const rest = escapeHtml(word.substring(mid));
+                        return `<strong>${bold}</strong>${rest}`;
+                    })
+                    .join(" ");
+            });
+            return processedLines.join("<br>");
+        }
+
+        // ============ SETTINGS HANDLERS ============
+        // Font buttons
+        document.querySelectorAll(".font-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                document
+                    .querySelectorAll(".font-btn")
+                    .forEach((b) => b.classList.remove("active"));
+                btn.classList.add("active");
+                state.currentFont = btn.dataset.font;
+                updateDisplay();
+            });
+        });
+
+        // Bionic reading toggle
+        document
+            .getElementById("bionicToggle")
+            .addEventListener("change", (e) => {
+                state.bionicMode = e.target.checked;
+                updateDisplay();
+            });
+
+        // Letter spacing slider
+        document
+            .getElementById("letterSpacing")
+            .addEventListener("input", (e) => {
+                state.letterSpacing = parseFloat(e.target.value);
+                const val = state.letterSpacing;
+                let label = "Normal";
+                if (val >= 3) label = "Extra Wide";
+                else if (val >= 1.5) label = "Wide";
+                document.getElementById("letterSpacingValue").textContent = label;
+                updateDisplay();
+            });
+
+        // Line height slider
+        document.getElementById("lineHeight").addEventListener("input", (e) => {
+            state.lineHeight = parseFloat(e.target.value);
+            document.getElementById("lineHeightValue").textContent =
+                state.lineHeight.toFixed(1);
+            updateDisplay();
+        });
+
+        // Font size slider
+        document.getElementById("fontSize").addEventListener("input", (e) => {
+            state.fontSize = parseInt(e.target.value);
+            document.getElementById("fontSizeValue").textContent =
+                state.fontSize + "px";
+            updateDisplay();
+        });
+
+        // Background color buttons
+        document.querySelectorAll(".color-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                document
+                    .querySelectorAll(".color-btn")
+                    .forEach((b) => b.classList.remove("active"));
+                btn.classList.add("active");
+                state.backgroundColor = btn.dataset.color;
+                updateDisplay();
+            });
+        });
+
+        // ============ READ ALOUD ============
+        readAloudBtn.addEventListener("click", () => {
+            if (state.currentlySpeaking) {
+                speechSynthesis.cancel();
+                state.currentlySpeaking = false;
+                readAloudBtn.innerHTML = "🔊 Read Aloud";
+                pauseBtn.style.display = "none";
+                return;
+            }
+
+            if (!state.rawText) {
+                showError("No text to read. Please upload a document first.");
+                return;
+            }
+
+            state.utterance = new SpeechSynthesisUtterance(state.rawText);
+            state.utterance.rate = 0.9;
+            state.utterance.pitch = 1;
+            state.utterance.volume = 1;
+
+            state.utterance.onend = () => {
+                state.currentlySpeaking = false;
+                readAloudBtn.innerHTML = "🔊 Read Aloud";
+                pauseBtn.style.display = "none";
+            };
+
+            state.currentlySpeaking = true;
+            readAloudBtn.innerHTML = "⏹ Stop";
+            pauseBtn.style.display = "inline-block";
+            speechSynthesis.speak(state.utterance);
+        });
+
+        pauseBtn.addEventListener("click", () => {
+            if (speechSynthesis.paused) {
+                speechSynthesis.resume();
+                pauseBtn.innerHTML = "⏸ Pause";
+            } else {
+                speechSynthesis.pause();
+                pauseBtn.innerHTML = "▶ Resume";
+            }
+        });
+
+        // ============ DOWNLOAD ============
+        downloadBtn.addEventListener("click", () => {
+            if (!state.rawText) {
+                showError("No text to download. Please upload a document first.");
+                return;
+            }
+            const a = document.createElement("a");
+            a.href =
+                "data:text/plain;charset=utf-8," + encodeURIComponent(state.rawText);
+            a.download = "readeasy-text.txt";
+            a.style.display = "none";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
     </script>
-  </body>
+</body>
+
 </html>
