@@ -808,7 +808,7 @@
             <div class="loading-spinner" id="loadingSpinner">
                 <span class="loading-emoji">✨</span>
                 <div class="spinner"></div>
-                <div class="loading-message">Making your words easier to read...</div>
+                <div class="loading-message">Reading your page with AI... ✨</div>
             </div>
 
             <!-- Split View (Before/After) -->
@@ -843,8 +843,6 @@
         </div>
     </div>
 
-    <!-- Tesseract.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
     <!-- PDF.js for PDF rendering -->
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 
@@ -971,27 +969,47 @@
             clearError();
         }
 
-        // ============ READ FILE HELPERS ============
+        // ============ FILE / CANVAS HELPERS ============
         function readFileAsArrayBuffer(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-                reader.onload = (e) => resolve(e.target.result);
+                reader.onload  = (e) => resolve(e.target.result);
                 reader.onerror = reject;
                 reader.readAsArrayBuffer(file);
             });
         }
 
-        // Render a PDF page to an HTMLCanvasElement (Tesseract accepts canvas directly)
-        async function renderPdfPageToCanvas(pdfDoc, pageNum) {
-            const page = await pdfDoc.getPage(pageNum);
-            const scale = 2; // higher = better OCR accuracy
-            const viewport = page.getViewport({ scale });
-            const canvas = document.createElement('canvas');
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
-            const ctx = canvas.getContext('2d');
-            await page.render({ canvasContext: ctx, viewport }).promise;
-            return canvas; // return the element, not a data URL
+        // Render one PDF page → blob: URL
+        async function renderPdfPageToBlobURL(pdfDoc, pageNum) {
+            const page     = await pdfDoc.getPage(pageNum);
+            const viewport = page.getViewport({ scale: 2 });
+            const canvas   = document.createElement('canvas');
+            canvas.width   = viewport.width;
+            canvas.height  = viewport.height;
+            await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+            return new Promise((resolve, reject) => {
+                canvas.toBlob(blob => {
+                    if (!blob) { reject(new Error('Canvas toBlob failed')); return; }
+                    resolve(URL.createObjectURL(blob));
+                }, 'image/png');
+            });
+        }
+
+        // ============ OCR.SPACE API ============
+        async function extractTextFromBlob(blobURL) {
+            const blob = await fetch(blobURL).then(r => r.blob());
+            const formData = new FormData();
+            formData.append('file', blob, 'page.png');
+            formData.append('apikey', 'helloworld'); // free test key
+            formData.append('language', 'eng');
+            formData.append('isOverlayRequired', 'false');
+
+            const res = await fetch('https://api.ocr.space/parse/image', {
+                method: 'POST',
+                body: formData
+            });
+            const json = await res.json();
+            return json.ParsedResults?.[0]?.ParsedText || '';
         }
 
         // ============ OCR PROCESSING ============
@@ -1003,32 +1021,29 @@
             processBtn.disabled = true;
             clearError();
 
+            const blobURLs = [];
+
             try {
-                // Tesseract.js v4: createWorker accepts language as first arg
-                const worker = await Tesseract.createWorker('eng');
                 let fullText = '';
 
                 if (file.type === 'application/pdf') {
-                    // PDF: render each page to canvas → pass canvas to Tesseract
                     const arrayBuffer = await readFileAsArrayBuffer(file);
-                    const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                    const numPages = pdfDoc.numPages;
+                    const pdfDoc      = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    const numPages    = pdfDoc.numPages;
 
                     for (let p = 1; p <= numPages; p++) {
-                        const loadingMsg = document.querySelector('.loading-message');
-                        if (loadingMsg) loadingMsg.textContent =
+                        const msg = document.querySelector('.loading-message');
+                        if (msg) msg.textContent =
                             `Reading page ${p} of ${numPages}... hang tight! 📖`;
-                        const canvas = await renderPdfPageToCanvas(pdfDoc, p);
-                        const { data: { text } } = await worker.recognize(canvas);
-                        fullText += text + '\n\n';
+                        const blobURL = await renderPdfPageToBlobURL(pdfDoc, p);
+                        blobURLs.push(blobURL);
+                        fullText += await extractTextFromBlob(blobURL) + '\n\n';
                     }
                 } else {
-                    // Image: pass the File object directly — Tesseract v4 handles File/Blob natively
-                    const { data: { text } } = await worker.recognize(file);
-                    fullText = text;
+                    const blobURL = URL.createObjectURL(file);
+                    blobURLs.push(blobURL);
+                    fullText = await extractTextFromBlob(blobURL);
                 }
-
-                await worker.terminate();
 
                 state.rawText = fullText.trim();
 
@@ -1044,6 +1059,7 @@
                 showError('Error processing file: ' + (err.message || String(err)));
             } finally {
                 processBtn.disabled = false;
+                blobURLs.forEach(u => URL.revokeObjectURL(u));
             }
         });
 
