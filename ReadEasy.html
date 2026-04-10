@@ -6,12 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ReadEasy - Make Reading Fun!</title>
 
-    <!-- Google Fonts: OpenDyslexic, Lexie Readable, and system fonts -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&family=Lexie+Readable:wght@400;700&display=swap"
-        rel="stylesheet" />
+    <!-- Lexie Readable via cdnfonts -->
+    <link href="https://fonts.cdnfonts.com/css/lexie-readable" rel="stylesheet">
 
     <style>
+        @font-face {
+            font-family: 'OpenDyslexic';
+            src: url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@master/compiled/OpenDyslexic-Regular.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'OpenDyslexic';
+            src: url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@master/compiled/OpenDyslexic-Bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -910,7 +921,7 @@
         };
 
         const fontMap = {
-            OpenDyslexic: '"OpenDyslexic", sans-serif',
+            "OpenDyslexic": '"OpenDyslexic", sans-serif',
             "Lexie Readable": '"Lexie Readable", sans-serif',
             Arial: "Arial, sans-serif",
         };
